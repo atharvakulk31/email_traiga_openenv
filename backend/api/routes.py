@@ -70,7 +70,7 @@ async def get_tasks():
             description="Classify the email into the correct category: "
                         "Billing Refund, Account, Feature Request, or Technical Support.",
             difficulty="Easy",
-            max_score=1.0,
+            max_score=0.99,
             grader="easy_grader"
         ),
         TaskInfo(
@@ -79,7 +79,7 @@ async def get_tasks():
             description="Detect the urgency level of the email: Low, Medium, or High. "
                         "Partial credit is given for adjacent levels.",
             difficulty="Medium",
-            max_score=1.0,
+            max_score=0.99,
             grader="medium_grader"
         ),
         TaskInfo(
@@ -89,7 +89,7 @@ async def get_tasks():
                         "Scored on: apology present, solution provided, "
                         "professional tone, and subject relevance.",
             difficulty="Hard",
-            max_score=1.0,
+            max_score=0.99,
             grader="hard_grader"
         ),
     ]
