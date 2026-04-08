@@ -15,7 +15,7 @@ tags:
   - openai
   - meta
   - pytorch
-short_description: AI email triage environment for the Meta + PyTorch OpenEnv Hackathon
+short_description: AI email triage — Meta PyTorch OpenEnv Hackathon
 ---
 
 # Email Triage OpenEnv
