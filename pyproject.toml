@@ -18,7 +18,11 @@ dependencies = [
     "httpx==0.26.0",
     "aiofiles==23.2.1",
     "requests>=2.31.0",
+    "openenv-core>=0.2.0",
 ]
+
+[project.scripts]
+server = "backend.main:app"
 
 [project.urls]
 Homepage = "https://huggingface.co/spaces/AtharvaKulk31/email-triage-openenv"
