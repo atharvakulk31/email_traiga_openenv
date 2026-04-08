@@ -26,10 +26,19 @@ class OpenEnvPathRewrite:
     def __init__(self, app):
         self.app = app
 
+    # All root-level paths that the OpenEnv validator may call without /api prefix
+    _REWRITE_PATHS = {
+        "/reset", "/step", "/state", "/health",
+        "/tasks", "/graders", "/emails", "/schema",
+    }
+
     async def __call__(self, scope, receive, send):
         if scope.get("type") == "http":
             path = scope.get("path", "")
-            if path in ("/reset", "/step", "/state", "/health"):
+            # Also rewrite /tasks/{id} style paths
+            if path in self._REWRITE_PATHS or any(
+                path.startswith(p + "/") for p in self._REWRITE_PATHS
+            ):
                 scope = dict(scope)
                 scope["path"]     = "/api" + path
                 scope["raw_path"] = ("/api" + path).encode("utf-8")
