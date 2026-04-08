@@ -250,6 +250,17 @@ def main():
         total_score += score
 
         # ── [STEP] ────────────────────────────────────────────────────────────
+        # Build per-task scores from step response (required by Phase 2 validator)
+        task_scores = [
+            {
+                "task_id": t.task_id,
+                "name":    t.name,
+                "grader":  t.grader,
+                "score":   round(t.score, 4),   # strictly between 0 and 1
+                "weight":  t.weight,
+            }
+            for t in step_resp.tasks
+        ]
         step_log = json.dumps({
             "event":    "step",
             "step":     i,
@@ -268,6 +279,7 @@ def main():
                 "category": email.category.value,
                 "priority": email.priority.value,
             },
+            "tasks": task_scores,
         })
         print(f"[STEP] {step_log}", flush=True)
 
@@ -292,6 +304,16 @@ def main():
     pass_count  = sum(1 for r in results if r["score"] >= 0.7)
 
     # ── [END] ─────────────────────────────────────────────────────────────────
+    # Aggregate per-task scores (average across all steps, strictly in (0,1))
+    def _clamp(v):
+        return max(0.01, min(0.99, v))
+
+    avg_cat_score = _clamp(round(cat_correct / n, 4)) if n else 0.01
+    avg_pri_score = _clamp(round(pri_correct / n, 4)) if n else 0.01
+    avg_rep_score = _clamp(round(
+        sum(r["score"] for r in results) / n - 0.5 * avg_cat_score - 0.3 * avg_pri_score, 4
+    ) / 0.2) if n else 0.01
+
     end_log = json.dumps({
         "event":             "end",
         "model":             model,
@@ -301,11 +323,29 @@ def main():
         "category_accuracy": round(cat_correct / n, 4) if n else 0,
         "priority_accuracy": round(pri_correct / n, 4) if n else 0,
         "pass_rate":         round(pass_count  / n, 4) if n else 0,
-        "tasks": {
-            "task_1_easy_category":   f"{cat_correct}/{n} correct (binary, weight=0.50)",
-            "task_2_medium_priority": f"{pri_correct}/{n} correct (partial, weight=0.30)",
-            "task_3_hard_reply":      "graded per step (4-check rubric, weight=0.20)",
-        },
+        "tasks": [
+            {
+                "task_id": "task_1",
+                "name":    "Email Classification",
+                "grader":  "easy_grader",
+                "score":   avg_cat_score,
+                "weight":  0.5,
+            },
+            {
+                "task_id": "task_2",
+                "name":    "Priority Detection",
+                "grader":  "medium_grader",
+                "score":   avg_pri_score,
+                "weight":  0.3,
+            },
+            {
+                "task_id": "task_3",
+                "name":    "Reply Generation",
+                "grader":  "hard_grader",
+                "score":   _clamp(avg_rep_score),
+                "weight":  0.2,
+            },
+        ],
     })
     print(f"[END] {end_log}", flush=True)
 
