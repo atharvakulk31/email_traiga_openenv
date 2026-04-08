@@ -7,7 +7,10 @@ Checks (each worth 1/4 of the score):
   3. Professional tone maintained
   4. Addresses the specific email subject
 
-Scores are strictly between 0 and 1 (exclusive), required by OpenEnv Phase 2:
+grade() returns a float strictly between 0 and 1 (exclusive),
+consistent with EasyGrader and MediumGrader interfaces.
+
+Score map:
   4/4 checks → 0.99
   3/4 checks → 0.74
   2/4 checks → 0.50
@@ -16,7 +19,7 @@ Scores are strictly between 0 and 1 (exclusive), required by OpenEnv Phase 2:
 """
 
 import re
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Union
 
 
 APOLOGY_KEYWORDS = [
@@ -53,11 +56,40 @@ def _clamp(score: float) -> float:
     return max(0.01, min(0.99, score))
 
 
-class HardGrader:
-    """Grades reply quality on 4 dimensions (Task 3)."""
+def _get_subject(email) -> str:
+    """Extract subject string from either a string or an email object."""
+    if isinstance(email, str):
+        return email
+    return getattr(email, "subject", "") or ""
 
-    def grade(self, reply: str, email) -> Tuple[float, Dict]:
+
+class HardGrader:
+    """Grades reply quality on 4 dimensions (Task 3).
+
+    grade() returns a float strictly in (0, 1), consistent with EasyGrader
+    and MediumGrader interfaces — the validator can call it safely.
+
+    grade_with_detail() returns (float, dict) for internal use where the
+    breakdown dict is needed.
+    """
+
+    def grade(self, reply: str, email: Union[str, object] = "") -> float:
+        """
+        Returns a float strictly between 0 and 1 (exclusive).
+
+        Args:
+            reply: The draft reply string to evaluate.
+            email: An email object with a .subject attribute, or a plain string subject.
+        """
+        score, _ = self.grade_with_detail(reply, email)
+        return score
+
+    def grade_with_detail(self, reply: str, email: Union[str, object] = "") -> Tuple[float, Dict]:
+        """
+        Returns (score, detail_dict) for internal grading with breakdown.
+        """
         reply_lower = reply.lower()
+        subject = _get_subject(email)
         detail: Dict[str, bool] = {}
 
         # Check 1: Apology / empathy
@@ -73,11 +105,13 @@ class HardGrader:
         detail["professional_tone"] = (not has_informal) and has_closing and has_min_len
 
         # Check 4: Addresses email subject
-        subject_words = set(re.findall(r"\b\w{4,}\b", email.subject.lower()))
+        subject_words = set(re.findall(r"\b\w{4,}\b", subject.lower()))
         stop_words = {"your", "with", "this", "that", "have", "from", "will",
                       "they", "when", "what", "where", "been", "does", "please"}
         relevant_words = subject_words - stop_words
-        detail["addresses_subject"] = any(w in reply_lower for w in relevant_words)
+        detail["addresses_subject"] = bool(relevant_words) and any(
+            w in reply_lower for w in relevant_words
+        )
 
         checks_passed = sum(detail.values())
         score = _clamp(_SCORE_MAP.get(checks_passed, checks_passed / 4.0))

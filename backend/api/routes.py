@@ -202,7 +202,7 @@ async def triage_email(req: TriageRequest):
     class _EmailCtx:
         def __init__(self, subj): self.subject = subj
     try:
-        reply_score, reply_detail = _hard.grade(
+        reply_score, reply_detail = _hard.grade_with_detail(
             reply=action.get("reply", ""), email=_EmailCtx(subject)
         )
     except Exception:

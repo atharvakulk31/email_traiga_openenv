@@ -148,7 +148,7 @@ class EmailTriageEnv:
                 penalty += 0.1
                 explanation_parts.append("Empty reply (-0.10).")
             else:
-                reply_score, reply_detail = self._hard_grader.grade(
+                reply_score, reply_detail = self._hard_grader.grade_with_detail(
                     reply=action.reply,
                     email=self._current_email
                 )
