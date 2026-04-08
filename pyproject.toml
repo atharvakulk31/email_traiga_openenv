@@ -1,13 +1,13 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "email-triage-openenv"
 version = "1.0.0"
 description = "AI email triage environment for the Meta + PyTorch OpenEnv Hackathon"
 readme = "README.md"
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi==0.109.0",
@@ -19,11 +19,15 @@ dependencies = [
     "aiofiles==23.2.1",
     "requests>=2.31.0",
     "openenv-core>=0.2.0",
+    "openenv>=0.1.0",
 ]
 
 [project.scripts]
-server = "backend.main:app"
+server = "server.app:main"
 
 [project.urls]
 Homepage = "https://huggingface.co/spaces/AtharvaKulk31/email-triage-openenv"
 Repository = "https://github.com/atharvakulk31/email_traiga_openenv"
+
+[tool.setuptools.packages.find]
+include = ["backend*", "server*"]
