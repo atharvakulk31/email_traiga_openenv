@@ -307,7 +307,7 @@ def main():
 
     # ── Aggregate metrics ─────────────────────────────────────────────────────
     n           = len(results)
-    avg_score   = total_score / n if n else 0.0
+    avg_score   = total_score / n if n else 0.01
     cat_correct = sum(1 for r in results if r["predicted_category"] == r["expected_category"])
     pri_correct = sum(1 for r in results if r["predicted_priority"] == r["expected_priority"])
     pass_count  = sum(1 for r in results if r["score"] >= 0.7)
@@ -327,9 +327,9 @@ def main():
         "total_emails":      n,
         "total_score":       round(total_score, 4),
         "average_score":     round(avg_score,   4),
-        "category_accuracy": round(cat_correct / n, 4) if n else 0,
-        "priority_accuracy": round(pri_correct / n, 4) if n else 0,
-        "pass_rate":         round(pass_count  / n, 4) if n else 0,
+        "category_accuracy": round(cat_correct / n, 4) if n else 0.01,
+        "priority_accuracy": round(pri_correct / n, 4) if n else 0.01,
+        "pass_rate":         round(pass_count  / n, 4) if n else 0.01,
         "tasks": [
             {
                 "task_id": "task_1",
@@ -363,9 +363,9 @@ def main():
             "mode":             mode,
             "total_emails":     n,
             "average_score":    round(avg_score, 4),
-            "category_accuracy": round(cat_correct / n, 4) if n else 0,
-            "priority_accuracy": round(pri_correct / n, 4) if n else 0,
-            "pass_rate":         round(pass_count  / n, 4) if n else 0,
+            "category_accuracy": round(cat_correct / n, 4) if n else 0.01,
+            "priority_accuracy": round(pri_correct / n, 4) if n else 0.01,
+            "pass_rate":         round(pass_count  / n, 4) if n else 0.01,
             "results":          results,
         }, f, indent=2)
 
