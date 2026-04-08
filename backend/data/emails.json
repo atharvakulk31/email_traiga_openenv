@@ -1,0 +1,227 @@
+[
+  {
+    "id": "email_001",
+    "subject": "Cannot Login - Invalid Credentials Error",
+    "sender": "marcus.holloway@techventures.io",
+    "body": "I have been trying to log into my account since this morning and keep receiving an 'Invalid Credentials' error despite entering my correct password. I have already tried resetting my password twice but the issue persists. This is extremely urgent as I have a client deadline tomorrow and need access to my project files immediately. Please escalate this as a priority and help me regain access as soon as possible.",
+    "category": "Account",
+    "priority": "High",
+    "timestamp": "2024-03-15T08:14:22Z"
+  },
+  {
+    "id": "email_002",
+    "subject": "Refund Request for Damaged Product - Order #847291",
+    "sender": "priya.nandakumar@globalmedia.com",
+    "body": "I received my order #847291 last Thursday and unfortunately the product arrived visibly damaged — the packaging was torn and the item itself had a cracked casing. I have attached photos of the damage for your reference. I would like to request a full refund to my original payment method as I no longer wish to receive a replacement. Please let me know the next steps to process this refund.",
+    "category": "Billing Refund",
+    "priority": "High",
+    "timestamp": "2024-03-15T08:47:05Z"
+  },
+  {
+    "id": "email_003",
+    "subject": "Feature Suggestion: Dark Mode for Mobile App",
+    "sender": "eli.tran@designstudio.net",
+    "body": "I have been using your mobile app daily for the past six months and absolutely love it. One feature I would love to see added is a dark mode option, as it would greatly reduce eye strain during late-night use. Many competing apps already offer this and it has become an expected standard for modern mobile applications. I hope your team considers adding it in a future update.",
+    "category": "Feature Request",
+    "priority": "Low",
+    "timestamp": "2024-03-15T09:02:33Z"
+  },
+  {
+    "id": "email_004",
+    "subject": "Duplicate Charge on My Subscription - Urgent Refund Needed",
+    "sender": "james.okoro@financeplus.org",
+    "body": "I noticed this morning that I have been charged twice for my monthly subscription — both charges appeared on my credit card statement dated March 14th. I only have one active subscription and did not authorize two payments. I am requesting an immediate refund for the duplicate charge and confirmation that this will not happen again. Please review my account and process the refund at your earliest convenience.",
+    "category": "Billing Refund",
+    "priority": "High",
+    "timestamp": "2024-03-15T09:31:14Z"
+  },
+  {
+    "id": "email_005",
+    "subject": "Request to Update Account Email Address",
+    "sender": "sofia.marchand@creativeworks.co",
+    "body": "I recently changed my professional email address and would like to update the email associated with my account accordingly. My current account email is sofia.marchand@oldcompany.com and I would like it changed to sofia.marchand@creativeworks.co. Please let me know if you require any additional verification to process this change. I appreciate your assistance.",
+    "category": "Account",
+    "priority": "Medium",
+    "timestamp": "2024-03-15T09:58:47Z"
+  },
+  {
+    "id": "email_006",
+    "subject": "App Crashes When Uploading Files Larger Than 10MB",
+    "sender": "derek.simmons@cloudarchitects.dev",
+    "body": "Every time I attempt to upload a file larger than 10MB through the app, it crashes entirely and I lose all unsaved progress. This has happened consistently across three different devices and two operating systems, so I do not believe it is a local issue. This bug is severely impacting my workflow as most of the files I work with are between 15-50MB. I need this resolved urgently as it is blocking critical project deliverables.",
+    "category": "Technical Support",
+    "priority": "High",
+    "timestamp": "2024-03-15T10:22:09Z"
+  },
+  {
+    "id": "email_007",
+    "subject": "Feature Request: CSV Export Functionality",
+    "sender": "amara.osei@datainsights.biz",
+    "body": "I would like to suggest adding a CSV export feature to the reporting section of your platform. Currently, we have to manually copy data into spreadsheets which is very time-consuming, especially for large datasets. A one-click CSV export would significantly improve productivity for our team. This is a fairly common feature in similar tools and I believe many other users would benefit from it as well.",
+    "category": "Feature Request",
+    "priority": "Low",
+    "timestamp": "2024-03-15T10:45:30Z"
+  },
+  {
+    "id": "email_008",
+    "subject": "Password Reset Link Expires Immediately - Locked Out of Account",
+    "sender": "nathaniel.burns@operationshq.com",
+    "body": "I have been trying to reset my password for the past hour but every reset link I receive expires by the time I click it — sometimes within seconds of the email arriving. I have checked my system clock and it is correctly synchronized, so I do not think that is the cause. I am now completely locked out of my account and unable to access any of my work. This is a critical issue and I need immediate assistance to regain access.",
+    "category": "Account",
+    "priority": "High",
+    "timestamp": "2024-03-15T11:03:55Z"
+  },
+  {
+    "id": "email_009",
+    "subject": "Invoice Amount Does Not Match Agreed Price",
+    "sender": "linda.petersen@nordicsolutions.eu",
+    "body": "I received my invoice for this month and the amount billed does not match the price we agreed upon during our contract negotiation in February. The invoice shows $850 but our signed agreement clearly states $720 per month. I have attached both the invoice and the signed contract for your reference. Please review and issue a corrected invoice or a partial refund for the difference.",
+    "category": "Billing Refund",
+    "priority": "Medium",
+    "timestamp": "2024-03-15T11:29:18Z"
+  },
+  {
+    "id": "email_010",
+    "subject": "Feature Request: Slack Integration",
+    "sender": "chris.yamamoto@agileteams.io",
+    "body": "Our entire team uses Slack as our primary communication platform and it would be incredibly useful if your tool integrated directly with it. Specifically, we would love to receive notifications and updates from the platform directly in our Slack channels. Many of the tools we use already offer Slack integrations and having one here would greatly reduce context-switching. I hope this is something your product team is considering for a future release.",
+    "category": "Feature Request",
+    "priority": "Low",
+    "timestamp": "2024-03-15T11:52:44Z"
+  },
+  {
+    "id": "email_011",
+    "subject": "Two-Factor Authentication Codes Not Working",
+    "sender": "vivian.okafor@securecorp.net",
+    "body": "Since yesterday, my two-factor authentication codes are being rejected every time I try to log in, even though my authenticator app is generating them correctly. I have tried regenerating the codes and ensuring my phone's time is synced, but the problem persists. I am unable to access my account at all without passing the 2FA step. This is a serious security and access issue — please help me resolve it immediately.",
+    "category": "Account",
+    "priority": "High",
+    "timestamp": "2024-03-15T12:15:02Z"
+  },
+  {
+    "id": "email_012",
+    "subject": "Inquiry About Bulk Discount for 25-Seat Enterprise Plan",
+    "sender": "thomas.nguyen@enterprise-group.com",
+    "body": "We are a mid-sized company currently evaluating your platform for team-wide use and are interested in purchasing 25 seats under an enterprise plan. I would like to know if you offer any bulk pricing discounts for organizations of our size. A comparison of your enterprise tier features versus the standard plan would also be very helpful. Please feel free to schedule a call to discuss this further if that is more convenient.",
+    "category": "Billing Refund",
+    "priority": "Low",
+    "timestamp": "2024-03-15T12:40:27Z"
+  },
+  {
+    "id": "email_013",
+    "subject": "Dashboard Showing Blank White Screen - Demo in 3 Hours",
+    "sender": "rachel.ford@startuplaunch.co",
+    "body": "Our entire dashboard is displaying as a blank white screen and has been for the past 45 minutes. We have cleared our browser cache, tried multiple browsers, and tested on different machines — the issue is consistent across all of them. This is a critical emergency as we have a product demo scheduled with investors in just three hours and we cannot proceed without access to the dashboard. Please treat this as highest priority and respond immediately.",
+    "category": "Technical Support",
+    "priority": "High",
+    "timestamp": "2024-03-15T13:05:39Z"
+  },
+  {
+    "id": "email_014",
+    "subject": "Unauthorized Charge After Account Cancellation",
+    "sender": "ben.cartwright@freelancehub.net",
+    "body": "I cancelled my subscription on February 28th and received a confirmation email, yet I was still charged the full monthly fee on March 10th. This is an unauthorized transaction as my account should have been fully cancelled before the billing date. I am requesting an immediate refund and written confirmation that no further charges will occur. I have also filed a dispute with my bank and will proceed with that if I do not hear back promptly.",
+    "category": "Billing Refund",
+    "priority": "High",
+    "timestamp": "2024-03-15T13:28:51Z"
+  },
+  {
+    "id": "email_015",
+    "subject": "Feature Request: Calendar View in Task Manager",
+    "sender": "ines.beaumont@productiveco.fr",
+    "body": "I have been using your task manager extensively and think it is a great tool overall. One addition that would make a significant difference for me is a calendar view, so I can see my tasks laid out by date rather than just as a list. This would make planning and scheduling much more intuitive, especially for deadline-driven work. I would love to see this in a future release and hope other users feel the same.",
+    "category": "Feature Request",
+    "priority": "Low",
+    "timestamp": "2024-03-15T13:50:14Z"
+  },
+  {
+    "id": "email_016",
+    "subject": "Account Locked After Login Attempts - Payroll Due Today",
+    "sender": "carlos.espinoza@hrpayrollsys.com",
+    "body": "My account has been locked following several failed login attempts this morning, and I am now completely unable to access the system. This is an urgent situation because today is our company's payroll processing day and I need access to complete payroll submissions for all employees before 5 PM. I have already tried contacting your automated support line but could not get through. Please unlock my account immediately and contact me at the number below.",
+    "category": "Account",
+    "priority": "High",
+    "timestamp": "2024-03-15T14:10:08Z"
+  },
+  {
+    "id": "email_017",
+    "subject": "API Rate Limit Too Restrictive - Requesting Higher Tier or Batch Endpoint",
+    "sender": "dev.team@scalableapps.tech",
+    "body": "We have been integrating your API into our application and are consistently hitting the rate limit, which is causing failures in our data pipeline. Our current plan allows 100 requests per minute, but our use case requires bursts of up to 500 requests per minute during peak processing times. We would like to explore either upgrading to a higher-tier plan with a raised limit or gaining access to a batch processing endpoint. Could you provide pricing and availability details for these options?",
+    "category": "Feature Request",
+    "priority": "Medium",
+    "timestamp": "2024-03-15T14:35:22Z"
+  },
+  {
+    "id": "email_018",
+    "subject": "Charged Pro Plan Price Instead of Basic Plan",
+    "sender": "mary.whitfield@smallbizowner.com",
+    "body": "I signed up for the Basic plan last month at $29 per month, but my credit card was charged $79 which is the Pro plan price. I never selected or agreed to the Pro plan and did not receive any notification about an upgrade. This appears to be a billing error on your end and I am requesting a refund of the $50 difference immediately. Please also confirm that my account is correctly set to the Basic plan going forward.",
+    "category": "Billing Refund",
+    "priority": "High",
+    "timestamp": "2024-03-15T15:02:47Z"
+  },
+  {
+    "id": "email_019",
+    "subject": "Login Page Returning 500 Internal Server Error",
+    "sender": "alex.morgan@devopscloud.io",
+    "body": "Since approximately 2:30 PM today, attempting to access the login page returns a 500 Internal Server Error. This is happening for all users on our team across different networks and devices, so it appears to be a server-side issue. We are completely unable to log in and all work has ground to a halt as a result. Please investigate and resolve this as quickly as possible and provide an ETA for the fix.",
+    "category": "Technical Support",
+    "priority": "High",
+    "timestamp": "2024-03-15T15:22:30Z"
+  },
+  {
+    "id": "email_020",
+    "subject": "Feature Request: Keyboard Shortcuts",
+    "sender": "paul.winters@powerusers.org",
+    "body": "I spend a significant amount of time in your application each day and would greatly benefit from the addition of keyboard shortcuts for common actions. Shortcuts for things like creating new items, saving, navigating between sections, and searching would dramatically speed up my workflow. Many professional-grade tools offer customizable keyboard shortcuts and I believe this would be a welcome addition for power users. I hope this can be considered for a future release.",
+    "category": "Feature Request",
+    "priority": "Low",
+    "timestamp": "2024-03-15T15:48:19Z"
+  },
+  {
+    "id": "email_021",
+    "subject": "Switching from Monthly to Annual Billing",
+    "sender": "jessica.park@consultingpros.com",
+    "body": "I am currently on a monthly billing plan and would like to switch to annual billing to take advantage of the discount offered on your pricing page. Could you let me know how to make this change and whether any prorated credit will be applied for the remaining days of my current monthly cycle? I would also appreciate confirmation of the new annual rate before the switch is made. Thank you for your help.",
+    "category": "Billing Refund",
+    "priority": "Low",
+    "timestamp": "2024-03-15T16:14:55Z"
+  },
+  {
+    "id": "email_022",
+    "subject": "CSV Data Export Timing Out - Audit Report Due Tomorrow",
+    "sender": "greg.hannigan@compliancetrack.com",
+    "body": "Every time I attempt to export our data as a CSV file, the process times out after about 30 seconds without completing. This is critical because I need this export to compile our quarterly compliance audit report, which is due to our auditors tomorrow morning. The dataset I am trying to export contains approximately 50,000 rows and was working without issue last month. Please investigate this urgently and provide a workaround or fix as soon as possible.",
+    "category": "Technical Support",
+    "priority": "High",
+    "timestamp": "2024-03-15T16:40:03Z"
+  },
+  {
+    "id": "email_023",
+    "subject": "Updating Billing Address on Account",
+    "sender": "nina.vasquez@remoteoffice.co",
+    "body": "Our company recently relocated and I need to update the billing address associated with our account to reflect the new location. The current address on file is 142 Oak Street, Suite 300, Austin, TX 78701 and the new address is 880 Congress Avenue, Floor 5, Austin, TX 78701. Please let me know if this can be updated directly through account settings or if I need to submit documentation. Thank you in advance.",
+    "category": "Account",
+    "priority": "Medium",
+    "timestamp": "2024-03-15T17:05:37Z"
+  },
+  {
+    "id": "email_024",
+    "subject": "Notification Emails Landing in Spam Folder",
+    "sender": "oliver.chen@marketingops.com",
+    "body": "Over the past two weeks, I have noticed that all notification emails from your platform are consistently being delivered to my spam folder rather than my inbox. I have added your sending domain to my safe senders list but the issue persists. My IT team has reviewed our mail filters and does not see any rules that should be causing this. This is causing me to miss important updates — please advise on how to resolve this deliverability issue.",
+    "category": "Technical Support",
+    "priority": "Medium",
+    "timestamp": "2024-03-15T17:30:44Z"
+  },
+  {
+    "id": "email_025",
+    "subject": "Feature Request: Dark Theme for Web Dashboard",
+    "sender": "hannah.brooks@uxdesignlab.com",
+    "body": "I spend long hours working in your web dashboard and would really appreciate a dark theme option to reduce eye strain, especially during evening work sessions. I notice the mobile app has this planned but it would be great to see it on the web version as well. A simple toggle between light and dark modes in the user settings would be more than sufficient. I believe this is a widely requested feature and hope it makes it onto the roadmap soon.",
+    "category": "Feature Request",
+    "priority": "Low",
+    "timestamp": "2024-03-16T08:22:11Z"
+  }
+]

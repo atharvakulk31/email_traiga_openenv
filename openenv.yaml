@@ -1,0 +1,121 @@
+name: email-triage-openenv
+version: "1.0.0"
+description: >
+  AI Email Triage Environment — simulates a real-world customer support
+  workflow where an AI agent reads, classifies, prioritizes, and replies
+  to incoming emails. Compliant with the OpenEnv specification.
+
+environment:
+  class: EmailTriageEnv
+  module: backend.env.email_triage_env
+  reset_endpoint:  POST /api/reset
+  step_endpoint:   POST /api/step
+  state_endpoint:  GET  /api/state
+  health_endpoint: GET  /api/health
+
+observation:
+  type: object
+  properties:
+    email_id: { type: string }
+    subject:  { type: string }
+    body:     { type: string }
+    sender:   { type: string }
+    history:  { type: array, items: { type: string } }
+
+action:
+  type: object
+  properties:
+    category:
+      type: string
+      enum: [Billing Refund, Account, Feature Request, Technical Support]
+    priority:
+      type: string
+      enum: [Low, Medium, High]
+    reply:
+      type: string
+      description: Professional customer support reply draft
+
+reward:
+  type: object
+  properties:
+    score:       { type: number, minimum: 0.0, maximum: 1.0 }
+    explanation: { type: string }
+    breakdown:   { type: object }
+
+reward_formula: |
+  reward = 0.5 * category_correct
+         + 0.3 * priority_correct
+         + 0.2 * reply_quality
+  penalties:
+    invalid_action: -0.2
+    empty_reply:    -0.1
+
+tasks:
+  - id: task_1
+    name: Email Classification
+    difficulty: Easy
+    grader: backend.graders.easy_grader.EasyGrader
+    weight: 0.5
+    description: Classify email into correct category (binary score)
+
+  - id: task_2
+    name: Priority Detection
+    difficulty: Medium
+    grader: backend.graders.medium_grader.MediumGrader
+    weight: 0.3
+    description: Detect urgency level — partial credit for adjacent levels
+
+  - id: task_3
+    name: Reply Generation
+    difficulty: Hard
+    grader: backend.graders.hard_grader.HardGrader
+    weight: 0.2
+    description: >
+      Draft a professional reply scored on:
+      apology present, solution provided,
+      professional tone, and subject relevance
+
+dataset:
+  path: backend/data/emails.json
+  size: 25
+  categories:
+    - Billing Refund
+    - Account
+    - Feature Request
+    - Technical Support
+  priorities: [Low, Medium, High]
+
+inference:
+  script: inference.py
+  log_format:
+    start: "[START] {json}"
+    step:  "[STEP] {json}"
+    end:   "[END] {json}"
+  env_vars:
+    - name: HF_TOKEN
+      required: false
+      description: HuggingFace token — enables Llama 3.1 8B via OpenAI-compatible HF router
+    - name: OPENAI_API_KEY
+      required: false
+      description: OpenAI API key — enables GPT-4o-mini; takes priority over HF_TOKEN if both set
+    - name: API_BASE_URL
+      required: false
+      default: "https://router.huggingface.co/v1"
+      description: LLM API base URL (OpenAI-compatible endpoint); ignored when OPENAI_API_KEY is set
+    - name: MODEL_NAME
+      required: false
+      default: "meta-llama/Llama-3.1-8B-Instruct"
+      description: LLM model ID — defaults to gpt-4o-mini if OPENAI_API_KEY set, else Llama 3.1 8B
+
+runtime:
+  max_minutes: 20
+  framework: FastAPI
+  python: "3.11"
+  cpu: 2
+  memory_gb: 8
+
+deployment:
+  platform: HuggingFace Spaces
+  dockerfile: Dockerfile
+  port: 7860
+  space_sdk: docker
