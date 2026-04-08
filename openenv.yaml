@@ -38,7 +38,7 @@ action:
 reward:
   type: object
   properties:
-    score:       { type: number, minimum: 0.0, maximum: 1.0 }
+    score:       { type: number, minimum: 0.01, maximum: 0.99 }
     explanation: { type: string }
     breakdown:   { type: object }
 

@@ -124,7 +124,7 @@ def llm_triage(subject: str, body: str, sender: str) -> dict:
 
     user_msg = f"Subject: {subject}\nFrom: {sender}\n\n{body[:2000]}"
 
-    response = client.chat.completions.create(
+    create_kwargs = dict(
         model=MODEL_NAME,
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
@@ -132,8 +132,12 @@ def llm_triage(subject: str, body: str, sender: str) -> dict:
         ],
         max_tokens=600,
         temperature=0.1,
-        response_format={"type": "json_object"},
     )
+    # JSON mode only supported by OpenAI — HuggingFace router ignores it or errors
+    if OPENAI_API_KEY:
+        create_kwargs["response_format"] = {"type": "json_object"}
+
+    response = client.chat.completions.create(**create_kwargs)
 
     content = response.choices[0].message.content.strip()
     content = re.sub(r"```(?:json)?\s*", "", content).strip("` \n")
@@ -283,6 +287,8 @@ def main():
         })
         print(f"[STEP] {step_log}", flush=True)
 
+        # Store per-task scores for accurate [END] aggregation
+        task_score_map = {t.task_id: t.score for t in step_resp.tasks}
         results.append({
             "email_id":           email.id,
             "subject":            email.subject,
@@ -291,6 +297,9 @@ def main():
             "predicted_priority": pred["priority"],
             "expected_priority":  email.priority.value,
             "score":              score,
+            "task_1_score":       task_score_map.get("task_1", 0.01),
+            "task_2_score":       task_score_map.get("task_2", 0.01),
+            "task_3_score":       task_score_map.get("task_3", 0.01),
         })
 
         if use_llm:
@@ -304,15 +313,13 @@ def main():
     pass_count  = sum(1 for r in results if r["score"] >= 0.7)
 
     # ── [END] ─────────────────────────────────────────────────────────────────
-    # Aggregate per-task scores (average across all steps, strictly in (0,1))
+    # Aggregate per-task scores — averaged directly from stored task scores
     def _clamp(v):
         return max(0.01, min(0.99, v))
 
-    avg_cat_score = _clamp(round(cat_correct / n, 4)) if n else 0.01
-    avg_pri_score = _clamp(round(pri_correct / n, 4)) if n else 0.01
-    avg_rep_score = _clamp(round(
-        sum(r["score"] for r in results) / n - 0.5 * avg_cat_score - 0.3 * avg_pri_score, 4
-    ) / 0.2) if n else 0.01
+    avg_cat_score = _clamp(round(sum(r["task_1_score"] for r in results) / n, 4)) if n else 0.01
+    avg_pri_score = _clamp(round(sum(r["task_2_score"] for r in results) / n, 4)) if n else 0.01
+    avg_rep_score = _clamp(round(sum(r["task_3_score"] for r in results) / n, 4)) if n else 0.01
 
     end_log = json.dumps({
         "event":             "end",
