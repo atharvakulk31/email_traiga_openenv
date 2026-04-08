@@ -6,6 +6,13 @@ Checks (each worth 1/4 of the score):
   2. Solution or next step provided
   3. Professional tone maintained
   4. Addresses the specific email subject
+
+Scores are strictly between 0 and 1 (exclusive), required by OpenEnv Phase 2:
+  4/4 checks → 0.99
+  3/4 checks → 0.74
+  2/4 checks → 0.50
+  1/4 checks → 0.26
+  0/4 checks → 0.01
 """
 
 import re
@@ -37,6 +44,14 @@ PROFESSIONAL_CLOSINGS = [
     "warm regards", "kind regards", "yours truly", "respectfully"
 ]
 
+# Map checks_passed → score strictly in (0, 1)
+_SCORE_MAP = {0: 0.01, 1: 0.26, 2: 0.50, 3: 0.74, 4: 0.99}
+
+
+def _clamp(score: float) -> float:
+    """Ensure score is strictly between 0 and 1 (exclusive)."""
+    return max(0.01, min(0.99, score))
+
 
 class HardGrader:
     """Grades reply quality on 4 dimensions (Task 3)."""
@@ -65,7 +80,7 @@ class HardGrader:
         detail["addresses_subject"] = any(w in reply_lower for w in relevant_words)
 
         checks_passed = sum(detail.values())
-        score = round(checks_passed / 4.0, 4)
+        score = _clamp(_SCORE_MAP.get(checks_passed, checks_passed / 4.0))
 
         return score, detail
 
@@ -74,6 +89,6 @@ class HardGrader:
             "task": "Reply Generation",
             "difficulty": "Hard",
             "description": "Agent must draft a professional customer support reply.",
-            "scoring": "0.25 per check: apology, solution, professional tone, addresses subject",
+            "scoring": "0.99/0.74/0.50/0.26/0.01 for 4/3/2/1/0 checks passed",
             "weight": 0.2
         }

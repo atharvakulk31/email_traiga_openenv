@@ -46,11 +46,21 @@ class Reward(BaseModel):
     breakdown: Optional[Dict[str, Any]] = None
 
 
+class TaskScore(BaseModel):
+    """Per-task graded score — required by OpenEnv Phase 2 validator."""
+    task_id: str
+    name: str
+    grader: str
+    score: float   # strictly between 0.0 and 1.0 (exclusive)
+    weight: float
+
+
 class StepResponse(BaseModel):
     observation: Optional[Observation] = None
     reward: Reward
     done: bool
     info: Dict[str, Any] = {}
+    tasks: List[TaskScore] = []   # ≥3 tasks required by OpenEnv Phase 2
 
 
 class StateResponse(BaseModel):
