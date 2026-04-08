@@ -8,10 +8,10 @@ description: >
 environment:
   class: EmailTriageEnv
   module: backend.env.email_triage_env
-  reset_endpoint:  POST /api/reset
-  step_endpoint:   POST /api/step
-  state_endpoint:  GET  /api/state
-  health_endpoint: GET  /api/health
+  reset_endpoint:  POST /reset
+  step_endpoint:   POST /step
+  state_endpoint:  GET  /state
+  health_endpoint: GET  /health
 
 observation:
   type: object

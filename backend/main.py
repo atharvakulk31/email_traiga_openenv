@@ -16,6 +16,25 @@ from fastapi.responses import FileResponse
 
 from backend.api.routes import router
 
+
+# ── OpenEnv root-level path rewrite middleware ─────────────────────────────────
+# The OpenEnv validator hits /reset, /step, /state directly (no /api prefix).
+# This middleware rewrites those paths to /api/* before routing.
+# Pure ASGI middleware — rewrites /reset /step /state /health → /api/*
+# BaseHTTPMiddleware breaks POST body; raw ASGI avoids that entirely.
+class OpenEnvPathRewrite:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope.get("type") == "http":
+            path = scope.get("path", "")
+            if path in ("/reset", "/step", "/state", "/health"):
+                scope = dict(scope)
+                scope["path"]     = "/api" + path
+                scope["raw_path"] = ("/api" + path).encode("utf-8")
+        await self.app(scope, receive, send)
+
 app = FastAPI(
     title="Email Triage OpenEnv API",
     description=(
@@ -28,6 +47,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+app.add_middleware(OpenEnvPathRewrite)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
