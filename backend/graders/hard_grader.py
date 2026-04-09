@@ -73,15 +73,18 @@ class HardGrader:
     breakdown dict is needed.
     """
 
-    def grade(self, reply: str, email: Union[str, object] = "") -> float:
+    def grade(self, predicted: str, ground_truth: str = "") -> float:
         """
-        Returns a float strictly between 0 and 1 (exclusive).
+        Standard OpenEnv grader interface — matches EasyGrader and MediumGrader.
 
         Args:
-            reply: The draft reply string to evaluate.
-            email: An email object with a .subject attribute, or a plain string subject.
+            predicted: The draft reply string to evaluate.
+            ground_truth: Unused (reply quality is self-contained); accepted for
+                          interface compatibility with the OpenEnv validator.
+
+        Returns a float strictly between 0 and 1 (exclusive).
         """
-        score, _ = self.grade_with_detail(reply, email)
+        score, _ = self.grade_with_detail(reply=predicted, email=ground_truth)
         return score
 
     def grade_with_detail(self, reply: str, email: Union[str, object] = "") -> Tuple[float, Dict]:
