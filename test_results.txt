@@ -1,0 +1,21 @@
+Email Triage OpenEnv — Smoke Test Results
+==================================================
+Cases passed : 10/10
+Failures     : 0
+Average reward: 0.4108
+Min / Max    : 0.3030 / 0.7930
+
+Per-case detail:
+{"case_id": 1, "email_id": "email_011", "reward": 0.303, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 2, "email_id": "email_025", "reward": 0.303, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 3, "email_id": "email_023", "reward": 0.45, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 4, "email_id": "email_022", "reward": 0.793, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 5, "email_id": "email_023", "reward": 0.45, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 6, "email_id": "email_016", "reward": 0.303, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 7, "email_id": "email_012", "reward": 0.303, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 8, "email_id": "email_023", "reward": 0.45, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 9, "email_id": "email_023", "reward": 0.45, "tasks": 3, "done": true, "status": "Success"}
+{"case_id": 10, "email_id": "email_008", "reward": 0.303, "tasks": 3, "done": true, "status": "Success"}
+
+Analysis:
+The environment responds correctly on /reset, /state, /step and /health. All 3 graded tasks return scores strictly in (0, 1) with full grader class paths. reward is returned as a float (openenv-core compliant). Suitable for meta-hackathon-v1 submission.
