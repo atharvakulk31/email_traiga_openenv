@@ -56,6 +56,7 @@ tasks:
     difficulty: Easy
     grader: backend.graders.easy_grader.EasyGrader
     weight: 0.5
+    max_score: 0.99
     description: Classify email into correct category (binary score)
 
   - id: task_2
@@ -63,6 +64,7 @@ tasks:
     difficulty: Medium
     grader: backend.graders.medium_grader.MediumGrader
     weight: 0.3
+    max_score: 0.99
     description: Detect urgency level — partial credit for adjacent levels
 
   - id: task_3
@@ -70,6 +72,7 @@ tasks:
     difficulty: Hard
     grader: backend.graders.hard_grader.HardGrader
     weight: 0.2
+    max_score: 0.99
     description: >
       Draft a professional reply scored on:
       apology present, solution provided,

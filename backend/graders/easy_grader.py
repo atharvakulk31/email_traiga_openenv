@@ -18,7 +18,7 @@ def _clamp(score: float) -> float:
 class EasyGrader:
     """Grades email category classification (Task 1)."""
 
-    def grade(self, predicted: str, ground_truth: str) -> float:
+    def grade(self, predicted: str, ground_truth: str = "") -> float:
         """
         Returns:
             0.99 if predicted matches ground_truth (case-insensitive)

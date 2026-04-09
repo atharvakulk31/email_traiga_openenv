@@ -18,7 +18,7 @@ def _clamp(score: float) -> float:
 class MediumGrader:
     """Grades priority detection (Task 2) with partial credit."""
 
-    def grade(self, predicted: str, ground_truth: str) -> float:
+    def grade(self, predicted: str, ground_truth: str = "") -> float:
         """
         Returns:
             0.99 — exact match

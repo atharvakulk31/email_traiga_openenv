@@ -71,7 +71,7 @@ async def get_tasks():
                         "Billing Refund, Account, Feature Request, or Technical Support.",
             difficulty="Easy",
             max_score=0.99,
-            grader="easy_grader"
+            grader="backend.graders.easy_grader.EasyGrader"
         ),
         TaskInfo(
             id="task_2",
@@ -80,7 +80,7 @@ async def get_tasks():
                         "Partial credit is given for adjacent levels.",
             difficulty="Medium",
             max_score=0.99,
-            grader="medium_grader"
+            grader="backend.graders.medium_grader.MediumGrader"
         ),
         TaskInfo(
             id="task_3",
@@ -90,7 +90,7 @@ async def get_tasks():
                         "professional tone, and subject relevance.",
             difficulty="Hard",
             max_score=0.99,
-            grader="hard_grader"
+            grader="backend.graders.hard_grader.HardGrader"
         ),
     ]
 
@@ -206,10 +206,10 @@ async def triage_email(req: TriageRequest):
             reply=action.get("reply", ""), email=_EmailCtx(subject)
         )
     except Exception:
-        reply_score, reply_detail = 0.0, {}
+        reply_score, reply_detail = 0.01, {}   # 0.01 not 0.0 — strictly in (0,1)
 
     model_used  = action.get("model", "unknown")
-    score       = round(0.5 * 1.0 + 0.3 * 1.0 + 0.2 * reply_score, 4)
+    score       = round(0.5 * 0.99 + 0.3 * 0.99 + 0.2 * reply_score, 4)  # 0.99 not 1.0
     explanation = (
         f"Model: {model_used} · "
         f"Category: {action['category']} · "
