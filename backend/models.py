@@ -56,11 +56,24 @@ class TaskScore(BaseModel):
 
 
 class StepResponse(BaseModel):
+    """
+    OpenEnv-compliant step response.
+
+    IMPORTANT: `reward` must be a FLOAT (not an object) to satisfy
+    openenv-core's StepResponse schema, which has `reward: Optional[float]`
+    with `extra="forbid"`. The Scaler Phase 2 validator parses responses
+    through openenv-core types and silently fails on type mismatches —
+    that's why all 12 prior submissions reported "tasks with graders" errors.
+
+    The rich reward info (explanation, breakdown) is preserved in
+    `reward_detail` for our frontend/CLI use.
+    """
     observation: Optional[Observation] = None
-    reward: Reward
+    reward: float                         # ← FLOAT scalar, openenv-core compliant
     done: bool
     info: Dict[str, Any] = {}
-    tasks: List[TaskScore] = []   # ≥3 tasks required by OpenEnv Phase 2
+    tasks: List[TaskScore] = []           # ≥3 tasks required by OpenEnv Phase 2
+    reward_detail: Optional[Reward] = None  # full explanation/breakdown for frontend
 
 
 class StateResponse(BaseModel):

@@ -68,7 +68,9 @@ export default function EvaluationDashboard() {
         newResults.push({
           email,
           action,
-          reward: stepRes.reward,
+          // reward field is now a float (openenv-core compliant);
+          // rich detail (score/explanation/breakdown) is in reward_detail
+          reward: stepRes.reward_detail || { score: stepRes.reward, explanation: '', breakdown: {} },
         })
         setResults([...newResults])
         setProgress(Math.round(((i + 1) / emails.length) * 100))

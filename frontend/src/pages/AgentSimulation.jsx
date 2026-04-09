@@ -94,10 +94,11 @@ export default function AgentSimulation() {
       await sleep(200)
 
       const stepRes = await envApi.step(action)
-      const { reward } = stepRes
+      // reward is now a float (openenv-core compliant); rich detail is in reward_detail
+      const reward = stepRes.reward_detail || { score: stepRes.reward, explanation: '', breakdown: {} }
       addLog(`Score received: ${reward.score.toFixed(4)}`, reward.score >= 0.7 ? 'success' : 'warn')
 
-      setResult({ action, reward: stepRes.reward, email: fullEmail })
+      setResult({ action, reward, email: fullEmail })
       addLog('Simulation complete.', 'success')
     } catch (e) {
       addLog(`Error: ${e.message}`, 'error')

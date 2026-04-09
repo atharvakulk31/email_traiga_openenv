@@ -249,8 +249,9 @@ def main():
             reply=pred["reply"],
         )
         step_resp = env.step(action)
-        reward    = step_resp.reward
-        score     = reward.score
+        # reward is now a float (openenv-core compliant); detail is in reward_detail
+        score     = step_resp.reward
+        reward    = step_resp.reward_detail  # rich object with explanation/breakdown
         total_score += score
 
         # ── [STEP] ────────────────────────────────────────────────────────────

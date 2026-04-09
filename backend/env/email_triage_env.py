@@ -177,8 +177,9 @@ class EmailTriageEnv:
         }
         self._history.append(step_record)
 
-        reward = Reward(
-            score=round(final_score, 4),
+        reward_scalar = round(final_score, 4)
+        reward_detail = Reward(
+            score=reward_scalar,
             explanation=" ".join(explanation_parts) if explanation_parts else "No action fields provided.",
             breakdown=breakdown
         )
@@ -210,10 +211,11 @@ class EmailTriageEnv:
 
         return StepResponse(
             observation=self._build_observation(),
-            reward=reward,
+            reward=reward_scalar,                         # FLOAT, openenv-core compliant
             done=self._done,
             info={"step": self._step_count, "total_score": self._total_score},
             tasks=tasks,
+            reward_detail=reward_detail,                  # rich breakdown for frontend
         )
 
     def state(self) -> StateResponse:
