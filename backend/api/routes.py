@@ -1,8 +1,8 @@
 """FastAPI route definitions for the Email Triage OpenEnv."""
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Body
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Any, Dict
 
 from backend.models import (
     Action, ResetResponse, StepResponse, StateResponse,
@@ -36,15 +36,37 @@ async def reset(email_id: Optional[str] = Query(default=None, description="Pin a
 
 
 @router.post("/step", response_model=StepResponse, summary="Submit an action")
-async def step(action: Action):
+async def step(payload: Dict[str, Any] = Body(...)):
     """
     Submit a triage action. Returns reward, updated observation, and done flag.
+
+    Accepts BOTH formats for OpenEnv-core compatibility:
+      1. Direct:  {"category": "...", "priority": "...", "reply": "..."}
+      2. Wrapped: {"action": {"category": "...", "priority": "...", "reply": "..."}}
+         (also accepts extra openenv-core fields: timeout_s, request_id, metadata)
 
     Action fields (all optional, include at least one):
     - **category**: Billing Refund | Account | Feature Request | Technical Support
     - **priority**: Low | Medium | High
     - **reply**: A drafted reply string
     """
+    # Unwrap openenv-core format if present
+    if isinstance(payload, dict) and "action" in payload and isinstance(payload["action"], dict):
+        action_data = payload["action"]
+    else:
+        action_data = payload or {}
+
+    # Strip openenv-core internal fields that aren't part of our Action schema
+    action_data = {
+        k: v for k, v in action_data.items()
+        if k in {"category", "priority", "reply"}
+    }
+
+    try:
+        action = Action(**action_data)
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Invalid action: {e}")
+
     try:
         result = _env.step(action)
     except RuntimeError as e:
