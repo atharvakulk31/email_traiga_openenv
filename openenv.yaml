@@ -1,4 +1,10 @@
+# OpenEnv environment manifest — official spec_version: 1 format
+spec_version: 1
 name: email-triage-openenv
+type: space
+runtime: fastapi
+app: server.app:app
+port: 7860
 version: "1.0.0"
 description: >
   AI Email Triage Environment — simulates a real-world customer support
