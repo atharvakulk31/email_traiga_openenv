@@ -1,15 +1,20 @@
-# OpenEnv environment manifest — official spec_version: 1 format
-spec_version: 1
-name: email-triage-openenv
-type: space
-runtime: fastapi
-app: server.app:app
-port: 7860
+# Scaler meta-hackathon-v1 manifest.
+# The first block matches the reference submission schema exactly —
+# these are the fields the Phase 2 validator reads. Everything below
+# is additive metadata describing our tasks/graders.
+
+name: "email-triage-openenv"
 version: "1.0.0"
-description: >
-  AI Email Triage Environment — simulates a real-world customer support
-  workflow where an AI agent reads, classifies, prioritizes, and replies
-  to incoming emails. Compliant with the OpenEnv specification.
+description: "AI Email Triage Environment — classify, prioritise, and reply to customer support emails with 3 graded tasks."
+benchmark: "meta-hackathon-v1"
+entry_point: "env:app"
+docker_image: "python:3.11-slim"
+env_type: "custom"
+
+# ─────────────────────────────────────────────────────────────
+# Extended metadata (ignored by the Scaler validator, used by
+# our frontend and documentation).
+# ─────────────────────────────────────────────────────────────
 
 environment:
   class: EmailTriageEnv

@@ -23,6 +23,7 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 
 # Copy project files
 COPY backend/   ./backend/
+COPY env.py     ./
 COPY inference.py ./
 COPY openenv.yaml ./
 
@@ -40,5 +41,5 @@ ENV PORT=7860
 
 EXPOSE 7860
 
-CMD ["python", "-m", "uvicorn", "backend.main:app", \
+CMD ["python", "-m", "uvicorn", "env:app", \
      "--host", "0.0.0.0", "--port", "7860", "--workers", "1"]
