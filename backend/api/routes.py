@@ -93,7 +93,7 @@ async def get_tasks():
                         "Billing Refund, Account, Feature Request, or Technical Support.",
             difficulty="Easy",
             max_score=0.99,
-            grader="graders.EasyGrader"
+            grader="graders:EasyGrader"
         ),
         TaskInfo(
             id="task_2",
@@ -102,7 +102,7 @@ async def get_tasks():
                         "Partial credit is given for adjacent levels.",
             difficulty="Medium",
             max_score=0.99,
-            grader="graders.MediumGrader"
+            grader="graders:MediumGrader"
         ),
         TaskInfo(
             id="task_3",
@@ -112,7 +112,7 @@ async def get_tasks():
                         "professional tone, and subject relevance.",
             difficulty="Hard",
             max_score=0.99,
-            grader="graders.HardGrader"
+            grader="graders:HardGrader"
         ),
     ]
 
@@ -286,6 +286,11 @@ async def metadata():
         "description": "AI Email Triage Environment — classify, prioritise, and reply to customer support emails with 3 graded tasks.",
         "version": "1.0.0",
         "benchmark": "meta-hackathon-v1",
+        "tasks": [
+            {"id": "task_1", "name": "Email Classification", "grader": "graders:EasyGrader",   "weight": 0.5},
+            {"id": "task_2", "name": "Priority Detection",   "grader": "graders:MediumGrader",  "weight": 0.3},
+            {"id": "task_3", "name": "Reply Generation",     "grader": "graders:HardGrader",    "weight": 0.2},
+        ],
     }
 
 

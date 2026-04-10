@@ -65,7 +65,7 @@ tasks:
   - id: task_1
     name: Email Classification
     difficulty: Easy
-    grader: graders.EasyGrader
+    grader: graders:EasyGrader
     weight: 0.5
     max_score: 0.99
     description: Classify email into correct category (binary score)
@@ -73,7 +73,7 @@ tasks:
   - id: task_2
     name: Priority Detection
     difficulty: Medium
-    grader: graders.MediumGrader
+    grader: graders:MediumGrader
     weight: 0.3
     max_score: 0.99
     description: Detect urgency level — partial credit for adjacent levels
@@ -81,7 +81,7 @@ tasks:
   - id: task_3
     name: Reply Generation
     difficulty: Hard
-    grader: graders.HardGrader
+    grader: graders:HardGrader
     weight: 0.2
     max_score: 0.99
     description: >
