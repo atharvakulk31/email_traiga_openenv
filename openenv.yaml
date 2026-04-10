@@ -1,135 +1,49 @@
-# Scaler meta-hackathon-v1 manifest.
-# The first block matches the reference submission schema exactly —
-# these are the fields the Phase 2 validator reads. Everything below
-# is additive metadata describing our tasks/graders.
+spec_version: 1
+name: email-triage-openenv
+type: space
+runtime: fastapi
+app: server.app:app
+port: 7860
+description: >
+  AI Email Triage Environment — an agent reads customer support emails,
+  classifies them, sets priority, and drafts a professional reply.
+  Three graded tasks with explicit grader classes.
 
-name: "email-triage-openenv"
-version: "1.0.0"
-description: "AI Email Triage Environment — classify, prioritise, and reply to customer support emails with 3 graded tasks."
 benchmark: "meta-hackathon-v1"
-entry_point: "env:app"
-docker_image: "python:3.11-slim"
-env_type: "custom"
-
-# ─────────────────────────────────────────────────────────────
-# Extended metadata (ignored by the Scaler validator, used by
-# our frontend and documentation).
-# ─────────────────────────────────────────────────────────────
-
-environment:
-  class: EmailTriageEnv
-  module: backend.env.email_triage_env
-  reset_endpoint:  POST /reset
-  step_endpoint:   POST /step
-  state_endpoint:  GET  /state
-  health_endpoint: GET  /health
-
-observation:
-  type: object
-  properties:
-    email_id: { type: string }
-    subject:  { type: string }
-    body:     { type: string }
-    sender:   { type: string }
-    history:  { type: array, items: { type: string } }
-
-action:
-  type: object
-  properties:
-    category:
-      type: string
-      enum: [Billing Refund, Account, Feature Request, Technical Support]
-    priority:
-      type: string
-      enum: [Low, Medium, High]
-    reply:
-      type: string
-      description: Professional customer support reply draft
-
-reward:
-  type: object
-  properties:
-    score:       { type: number, minimum: 0.01, maximum: 0.99 }
-    explanation: { type: string }
-    breakdown:   { type: object }
-
-reward_formula: |
-  reward = 0.5 * category_correct
-         + 0.3 * priority_correct
-         + 0.2 * reply_quality
-  penalties:
-    invalid_action: -0.2
-    empty_reply:    -0.1
 
 tasks:
   - id: task_1
     name: Email Classification
-    difficulty: Easy
+    difficulty: easy
     grader: graders:EasyGrader
-    weight: 0.5
-    max_score: 0.99
-    description: Classify email into correct category (binary score)
 
   - id: task_2
     name: Priority Detection
-    difficulty: Medium
+    difficulty: medium
     grader: graders:MediumGrader
-    weight: 0.3
-    max_score: 0.99
-    description: Detect urgency level — partial credit for adjacent levels
 
   - id: task_3
     name: Reply Generation
-    difficulty: Hard
+    difficulty: hard
     grader: graders:HardGrader
-    weight: 0.2
-    max_score: 0.99
-    description: >
-      Draft a professional reply scored on:
-      apology present, solution provided,
-      professional tone, and subject relevance
 
-dataset:
-  path: backend/data/emails.json
-  size: 25
-  categories:
-    - Billing Refund
-    - Account
-    - Feature Request
-    - Technical Support
-  priorities: [Low, Medium, High]
+observation_space:
+  type: object
+  fields:
+    email_id: str
+    subject: str
+    body: str
+    sender: str
+    history: list
 
-inference:
-  script: inference.py
-  log_format:
-    start: "[START] {json}"
-    step:  "[STEP] {json}"
-    end:   "[END] {json}"
-  env_vars:
-    - name: HF_TOKEN
-      required: false
-      description: HuggingFace token — enables Llama 3.1 8B via OpenAI-compatible HF router
-    - name: OPENAI_API_KEY
-      required: false
-      description: OpenAI API key — enables GPT-4o-mini; takes priority over HF_TOKEN if both set
-    - name: API_BASE_URL
-      required: false
-      default: "https://router.huggingface.co/v1"
-      description: LLM API base URL (OpenAI-compatible endpoint); ignored when OPENAI_API_KEY is set
-    - name: MODEL_NAME
-      required: false
-      default: "meta-llama/Llama-3.1-8B-Instruct"
-      description: LLM model ID — defaults to gpt-4o-mini if OPENAI_API_KEY set, else Llama 3.1 8B
-
-runtime:
-  max_minutes: 20
-  framework: FastAPI
-  python: "3.11"
-  cpu: 2
-  memory_gb: 8
-
-deployment:
-  platform: HuggingFace Spaces
-  dockerfile: Dockerfile
-  port: 7860
-  space_sdk: docker
+action_space:
+  type: object
+  fields:
+    category:
+      type: str
+      enum: [Billing Refund, Account, Feature Request, Technical Support]
+    priority:
+      type: str
+      enum: [Low, Medium, High]
+    reply:
+      type: str
