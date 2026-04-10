@@ -93,7 +93,7 @@ async def get_tasks():
                         "Billing Refund, Account, Feature Request, or Technical Support.",
             difficulty="Easy",
             max_score=0.99,
-            grader="backend.graders.easy_grader.EasyGrader"
+            grader="graders.EasyGrader"
         ),
         TaskInfo(
             id="task_2",
@@ -102,7 +102,7 @@ async def get_tasks():
                         "Partial credit is given for adjacent levels.",
             difficulty="Medium",
             max_score=0.99,
-            grader="backend.graders.medium_grader.MediumGrader"
+            grader="graders.MediumGrader"
         ),
         TaskInfo(
             id="task_3",
@@ -112,7 +112,7 @@ async def get_tasks():
                         "professional tone, and subject relevance.",
             difficulty="Hard",
             max_score=0.99,
-            grader="backend.graders.hard_grader.HardGrader"
+            grader="graders.HardGrader"
         ),
     ]
 
@@ -274,5 +274,50 @@ async def agent_status():
 
 @router.get("/health", summary="Health check")
 async def health():
-    """Simple health check endpoint."""
-    return {"status": "ok", "environment": "EmailTriageEnv", "version": "1.0.0"}
+    """Simple health check endpoint — returns 'healthy' for openenv-core validator."""
+    return {"status": "healthy", "environment": "EmailTriageEnv", "version": "1.0.0"}
+
+
+@router.get("/metadata", summary="Environment metadata")
+async def metadata():
+    """Return environment metadata — required by openenv-core validator."""
+    return {
+        "name": "email-triage-openenv",
+        "description": "AI Email Triage Environment — classify, prioritise, and reply to customer support emails with 3 graded tasks.",
+        "version": "1.0.0",
+        "benchmark": "meta-hackathon-v1",
+    }
+
+
+@router.get("/schema", summary="Environment schema")
+async def schema():
+    """Return action/observation/state schemas — required by openenv-core validator."""
+    return {
+        "action": {
+            "type": "object",
+            "properties": {
+                "category": {"type": "string", "enum": ["Billing Refund", "Account", "Feature Request", "Technical Support"]},
+                "priority": {"type": "string", "enum": ["Low", "Medium", "High"]},
+                "reply": {"type": "string"},
+            },
+        },
+        "observation": {
+            "type": "object",
+            "properties": {
+                "email_id": {"type": "string"},
+                "subject": {"type": "string"},
+                "body": {"type": "string"},
+                "sender": {"type": "string"},
+                "history": {"type": "array", "items": {"type": "string"}},
+            },
+        },
+        "state": {
+            "type": "object",
+            "properties": {
+                "email_id": {"type": "string"},
+                "step_count": {"type": "integer"},
+                "total_score": {"type": "number"},
+                "done": {"type": "boolean"},
+            },
+        },
+    }

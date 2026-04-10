@@ -30,6 +30,7 @@ class OpenEnvPathRewrite:
     _REWRITE_PATHS = {
         "/reset", "/step", "/state", "/health",
         "/tasks", "/graders", "/emails", "/schema",
+        "/metadata", "/triage", "/agent",
     }
 
     async def __call__(self, scope, receive, send):
@@ -72,10 +73,27 @@ FRONTEND_DIST = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"
 if os.path.isdir(FRONTEND_DIST):
     app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIST, "assets")), name="assets")
 
+    # Known API paths that should NEVER be caught by the SPA catch-all.
+    # If the validator hits an endpoint we don't have, it should get a 404 (not HTML).
+    _API_PREFIXES = (
+        "api/", "reset", "step", "state", "health", "tasks", "schema",
+        "metadata", "graders", "emails", "triage", "agent", "docs",
+        "redoc", "openapi.json", "mcp",
+    )
+
     @app.get("/", include_in_schema=False)
+    async def serve_spa_root():
+        index = os.path.join(FRONTEND_DIST, "index.html")
+        if os.path.isfile(index):
+            return FileResponse(index)
+        return {"message": "Frontend not built. Run: cd frontend && npm run build"}
+
     @app.get("/{full_path:path}", include_in_schema=False)
     async def serve_spa(full_path: str = ""):
-        # Serve API docs at /docs without catching
+        # Never serve HTML for API-like paths — let them 404 properly
+        if full_path.lower().startswith(_API_PREFIXES):
+            from fastapi.responses import JSONResponse
+            return JSONResponse({"detail": "Not Found"}, status_code=404)
         index = os.path.join(FRONTEND_DIST, "index.html")
         if os.path.isfile(index):
             return FileResponse(index)

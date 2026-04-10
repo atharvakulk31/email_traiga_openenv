@@ -23,7 +23,8 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 
 # Copy project files
 COPY backend/   ./backend/
-COPY env.py     ./
+COPY env.py      ./
+COPY graders.py  ./
 COPY inference.py ./
 COPY openenv.yaml ./
 
