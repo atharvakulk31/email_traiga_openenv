@@ -29,5 +29,8 @@ server = "server.app:main"
 Homepage = "https://huggingface.co/spaces/AtharvaKulk31/email-triage-openenv"
 Repository = "https://github.com/atharvakulk31/email_traiga_openenv"
 
+[tool.setuptools]
+py-modules = ["graders", "env", "models", "client"]
+
 [tool.setuptools.packages.find]
 include = ["backend*", "server*"]
