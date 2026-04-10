@@ -46,11 +46,32 @@ class EmailTriageEnv:
         self._done: bool = False
         self._history: list[Dict[str, Any]] = []
 
+        # Last step per-task scores — used by _grade_task1/2/3() called by validator
+        self._last_cat_score: float = 0.5
+        self._last_pri_score: float = 0.5
+        self._last_reply_score: float = 0.5
+
         self._easy_grader = EasyGrader()
         self._medium_grader = MediumGrader()
         self._hard_grader = HardGrader()
 
         self._load_emails()
+
+    # ── Grader hooks called by Scaler's Phase 2 validator ────────────────────
+    # The validator imports our grader classes (server.graders:EasyGrader etc.),
+    # passes the live env instance, and calls env._grade_task1/2/3().
+
+    def _grade_task1(self) -> float:
+        """Email classification score from last step. Strictly in (0, 1)."""
+        return _clamp(self._last_cat_score)
+
+    def _grade_task2(self) -> float:
+        """Priority detection score from last step. Strictly in (0, 1)."""
+        return _clamp(self._last_pri_score)
+
+    def _grade_task3(self) -> float:
+        """Reply generation score from last step. Strictly in (0, 1)."""
+        return _clamp(self._last_reply_score)
 
     def _load_emails(self) -> None:
         with open(DATA_PATH, "r", encoding="utf-8") as f:
@@ -161,6 +182,11 @@ class EmailTriageEnv:
                     f"(weight: 0.20, contribution: {0.2 * reply_score:.2f}). "
                     f"Checks: {reply_detail}."
                 )
+
+        # Store per-task scores for _grade_task1/2/3() validator hooks
+        self._last_cat_score   = cat_score
+        self._last_pri_score   = pri_score
+        self._last_reply_score = reply_score
 
         # --- Final score (clamped strictly between 0 and 1) ---
         raw_score = (0.5 * cat_score) + (0.3 * pri_score) + (0.2 * reply_score)

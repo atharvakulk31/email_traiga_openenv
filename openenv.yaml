@@ -12,20 +12,14 @@ description: >
 benchmark: "meta-hackathon-v1"
 
 tasks:
-  - id: task_1
-    name: Email Classification
-    difficulty: easy
-    grader: graders:EasyGrader
+  - id: task_easy
+    grader: server.graders:EasyGrader
 
-  - id: task_2
-    name: Priority Detection
-    difficulty: medium
-    grader: graders:MediumGrader
+  - id: task_medium
+    grader: server.graders:MediumGrader
 
-  - id: task_3
-    name: Reply Generation
-    difficulty: hard
-    grader: graders:HardGrader
+  - id: task_hard
+    grader: server.graders:HardGrader
 
 observation_space:
   type: object
