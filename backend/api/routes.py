@@ -87,32 +87,32 @@ async def get_tasks():
     """Return all available evaluation tasks."""
     return [
         TaskInfo(
-            id="task_1",
+            id="task_easy",
             name="Email Classification",
             description="Classify the email into the correct category: "
                         "Billing Refund, Account, Feature Request, or Technical Support.",
             difficulty="Easy",
             max_score=0.99,
-            grader="graders:EasyGrader"
+            grader="server.graders:EasyGrader"
         ),
         TaskInfo(
-            id="task_2",
+            id="task_medium",
             name="Priority Detection",
             description="Detect the urgency level of the email: Low, Medium, or High. "
                         "Partial credit is given for adjacent levels.",
             difficulty="Medium",
             max_score=0.99,
-            grader="graders:MediumGrader"
+            grader="server.graders:MediumGrader"
         ),
         TaskInfo(
-            id="task_3",
+            id="task_hard",
             name="Reply Generation",
             description="Draft a professional customer support reply. "
                         "Scored on: apology present, solution provided, "
                         "professional tone, and subject relevance.",
             difficulty="Hard",
             max_score=0.99,
-            grader="graders:HardGrader"
+            grader="server.graders:HardGrader"
         ),
     ]
 
@@ -287,9 +287,9 @@ async def metadata():
         "version": "1.0.0",
         "benchmark": "meta-hackathon-v1",
         "tasks": [
-            {"id": "task_1", "name": "Email Classification", "grader": "graders:EasyGrader",   "weight": 0.5},
-            {"id": "task_2", "name": "Priority Detection",   "grader": "graders:MediumGrader",  "weight": 0.3},
-            {"id": "task_3", "name": "Reply Generation",     "grader": "graders:HardGrader",    "weight": 0.2},
+            {"id": "task_easy",   "name": "Email Classification", "grader": "server.graders:EasyGrader",   "weight": 0.5},
+            {"id": "task_medium", "name": "Priority Detection",   "grader": "server.graders:MediumGrader",  "weight": 0.3},
+            {"id": "task_hard",   "name": "Reply Generation",     "grader": "server.graders:HardGrader",    "weight": 0.2},
         ],
     }
 

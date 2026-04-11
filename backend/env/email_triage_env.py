@@ -213,23 +213,23 @@ class EmailTriageEnv:
         # --- Build per-task list (required by OpenEnv Phase 2 validator) ---
         tasks = [
             TaskScore(
-                task_id="task_1",
+                task_id="task_easy",
                 name="Email Classification",
-                grader="graders:EasyGrader",
+                grader="server.graders:EasyGrader",
                 score=cat_score,
                 weight=0.5,
             ),
             TaskScore(
-                task_id="task_2",
+                task_id="task_medium",
                 name="Priority Detection",
-                grader="graders:MediumGrader",
+                grader="server.graders:MediumGrader",
                 score=pri_score,
                 weight=0.3,
             ),
             TaskScore(
-                task_id="task_3",
+                task_id="task_hard",
                 name="Reply Generation",
-                grader="graders:HardGrader",
+                grader="server.graders:HardGrader",
                 score=reply_score,
                 weight=0.2,
             ),
