@@ -48,7 +48,7 @@ class Reward(BaseModel):
 
 class TaskScore(BaseModel):
     """Per-task graded score — required by OpenEnv Phase 2 validator."""
-    task_id: str
+    id: str
     name: str
     grader: str
     score: float   # strictly between 0.0 and 1.0 (exclusive)

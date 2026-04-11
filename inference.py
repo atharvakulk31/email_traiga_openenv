@@ -258,7 +258,7 @@ def main():
         # Build per-task scores from step response (required by Phase 2 validator)
         task_scores = [
             {
-                "task_id": t.task_id,
+                "id":      t.id,
                 "name":    t.name,
                 "grader":  t.grader,
                 "score":   round(t.score, 4),   # strictly between 0 and 1
@@ -289,7 +289,7 @@ def main():
         print(f"[STEP] {step_log}", flush=True)
 
         # Store per-task scores for accurate [END] aggregation
-        task_score_map = {t.task_id: t.score for t in step_resp.tasks}
+        task_score_map = {t.id: t.score for t in step_resp.tasks}
         results.append({
             "email_id":           email.id,
             "subject":            email.subject,
@@ -333,21 +333,21 @@ def main():
         "pass_rate":         round(pass_count  / n, 4) if n else 0.01,
         "tasks": [
             {
-                "task_id": "task_easy",
+                "id":      "task_easy",
                 "name":    "Email Classification",
                 "grader":  "server.graders:EasyGrader",
                 "score":   avg_cat_score,
                 "weight":  0.5,
             },
             {
-                "task_id": "task_medium",
+                "id":      "task_medium",
                 "name":    "Priority Detection",
                 "grader":  "server.graders:MediumGrader",
                 "score":   avg_pri_score,
                 "weight":  0.3,
             },
             {
-                "task_id": "task_hard",
+                "id":      "task_hard",
                 "name":    "Reply Generation",
                 "grader":  "server.graders:HardGrader",
                 "score":   _clamp(avg_rep_score),
