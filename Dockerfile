@@ -22,12 +22,14 @@ RUN pip install --no-cache-dir -r requirements.txt && \
     pip install --no-cache-dir aiofiles
 
 # Copy project files
-COPY backend/   ./backend/
-COPY server/    ./server/
-COPY env.py      ./
-COPY graders.py  ./
-COPY inference.py ./
-COPY openenv.yaml ./
+COPY backend/      ./backend/
+COPY server/       ./server/
+COPY env.py        ./
+COPY graders.py    ./
+COPY inference.py  ./
+COPY openenv.yaml  ./
+COPY pyproject.toml ./
+COPY uv.lock       ./
 
 # Copy built frontend static files
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
