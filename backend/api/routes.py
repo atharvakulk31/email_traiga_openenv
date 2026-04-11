@@ -272,22 +272,16 @@ async def agent_status():
 @router.get("/health", summary="Health check")
 async def health():
     """Simple health check endpoint — returns 'healthy' for openenv-core validator."""
-    return {"status": "healthy", "environment": "EmailTriageEnv", "version": "1.0.0"}
+    return {"status": "healthy"}
 
 
 @router.get("/metadata", summary="Environment metadata")
 async def metadata():
-    """Return environment metadata — required by openenv-core validator."""
+    """Return environment metadata — openenv-core EnvironmentMetadata schema (no extra fields)."""
     return {
         "name": "email-triage-openenv",
         "description": "AI Email Triage Environment — classify, prioritise, and reply to customer support emails with 3 graded tasks.",
         "version": "1.0.0",
-        "benchmark": "meta-hackathon-v1",
-        "tasks": [
-            {"id": "task_easy",   "name": "Email Classification", "grader": "server.graders:EasyGrader",   "weight": 0.5},
-            {"id": "task_medium", "name": "Priority Detection",   "grader": "server.graders:MediumGrader",  "weight": 0.3},
-            {"id": "task_hard",   "name": "Reply Generation",     "grader": "server.graders:HardGrader",    "weight": 0.2},
-        ],
     }
 
 
