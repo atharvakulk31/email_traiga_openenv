@@ -9,8 +9,6 @@ description: >
   classifies them, sets priority, and drafts a professional reply.
   Three graded tasks with explicit grader classes.
 
-benchmark: "meta-hackathon-v1"
-
 tasks:
   - id: task_easy
     grader: server.graders:EasyGrader
@@ -20,24 +18,3 @@ tasks:
 
   - id: task_hard
     grader: server.graders:HardGrader
-
-observation_space:
-  type: object
-  fields:
-    email_id: str
-    subject: str
-    body: str
-    sender: str
-    history: list
-
-action_space:
-  type: object
-  fields:
-    category:
-      type: str
-      enum: [Billing Refund, Account, Feature Request, Technical Support]
-    priority:
-      type: str
-      enum: [Low, Medium, High]
-    reply:
-      type: str

@@ -29,10 +29,7 @@ async def reset(email_id: Optional[str] = Query(default=None, description="Pin a
     Returns the initial observation.
     """
     obs = _env.reset(email_id=email_id)
-    return ResetResponse(
-        observation=obs,
-        message=f"Environment reset. Loaded email: {obs.email_id}"
-    )
+    return ResetResponse(observation=obs)
 
 
 @router.post("/step", response_model=StepResponse, summary="Submit an action")

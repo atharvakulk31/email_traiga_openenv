@@ -95,8 +95,10 @@ class TaskInfo(BaseModel):
 
 
 class ResetResponse(BaseModel):
+    """openenv-core compatible reset response (extra fields omitted to avoid extra='forbid' rejection)."""
     observation: Observation
-    message: str
+    reward: Optional[float] = None
+    done: bool = False
 
 
 class EmailListResponse(BaseModel):
