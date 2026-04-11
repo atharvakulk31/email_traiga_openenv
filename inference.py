@@ -298,9 +298,9 @@ def main():
             "predicted_priority": pred["priority"],
             "expected_priority":  email.priority.value,
             "score":              score,
-            "task_1_score":       task_score_map.get("task_1", 0.01),
-            "task_2_score":       task_score_map.get("task_2", 0.01),
-            "task_3_score":       task_score_map.get("task_3", 0.01),
+            "task_1_score":       task_score_map.get("task_easy",   0.01),
+            "task_2_score":       task_score_map.get("task_medium", 0.01),
+            "task_3_score":       task_score_map.get("task_hard",   0.01),
         })
 
         if use_llm:
@@ -333,23 +333,23 @@ def main():
         "pass_rate":         round(pass_count  / n, 4) if n else 0.01,
         "tasks": [
             {
-                "task_id": "task_1",
+                "task_id": "task_easy",
                 "name":    "Email Classification",
-                "grader":  "easy_grader",
+                "grader":  "server.graders:EasyGrader",
                 "score":   avg_cat_score,
                 "weight":  0.5,
             },
             {
-                "task_id": "task_2",
+                "task_id": "task_medium",
                 "name":    "Priority Detection",
-                "grader":  "medium_grader",
+                "grader":  "server.graders:MediumGrader",
                 "score":   avg_pri_score,
                 "weight":  0.3,
             },
             {
-                "task_id": "task_3",
+                "task_id": "task_hard",
                 "name":    "Reply Generation",
-                "grader":  "hard_grader",
+                "grader":  "server.graders:HardGrader",
                 "score":   _clamp(avg_rep_score),
                 "weight":  0.2,
             },
