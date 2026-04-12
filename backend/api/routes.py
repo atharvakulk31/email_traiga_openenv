@@ -32,7 +32,7 @@ async def reset(email_id: Optional[str] = Query(default=None, description="Pin a
     return ResetResponse(observation=obs)
 
 
-@router.post("/step", response_model=StepResponse, summary="Submit an action")
+@router.post("/step", summary="Submit an action")
 async def step(payload: Dict[str, Any] = Body(...)):
     """
     Submit a triage action. Returns reward, updated observation, and done flag.
@@ -68,7 +68,26 @@ async def step(payload: Dict[str, Any] = Body(...)):
         result = _env.step(action)
     except RuntimeError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return result
+
+    # Build openenv-core-compatible StepResponse (extra="forbid" — only observation, reward, done allowed).
+    # Task scores are embedded inside observation so the Scaler Phase 2 validator can read them.
+    obs_dict = result.observation.model_dump() if result.observation else {}
+    obs_dict["tasks"] = [
+        {
+            "id":     t.id,
+            "name":   t.name,
+            "grader": t.grader,
+            "score":  round(t.score, 4),
+            "weight": t.weight,
+        }
+        for t in result.tasks
+    ]
+
+    return {
+        "observation": obs_dict,
+        "reward":      result.reward,
+        "done":        result.done,
+    }
 
 
 @router.get("/state", response_model=StateResponse, summary="Get current environment state")
