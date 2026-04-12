@@ -8,8 +8,9 @@ Run (production / Docker):
     uvicorn backend.main:app --host 0.0.0.0 --port 8000
 """
 
+import json
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -67,6 +68,115 @@ app.add_middleware(
 )
 
 app.include_router(router, prefix="/api")
+
+
+# ── WebSocket endpoint (openenv EnvClient protocol) ───────────────────────────
+# The openenv EnvClient connects to ws://{host}/ws and sends JSON messages:
+#   reset: {"type": "reset", "data": {...}}
+#   step:  {"type": "step",  "data": {"category": ..., "priority": ..., "reply": ...}}
+#   state: {"type": "state"}
+#   close: {"type": "close"}
+# Responses are: {"type": "observation", "data": {observation, reward, done, tasks}}
+@app.websocket("/ws")
+async def websocket_env(websocket: WebSocket):
+    """WebSocket endpoint for persistent environment sessions (openenv EnvClient protocol)."""
+    from backend.env.email_triage_env import EmailTriageEnv
+    from backend.models import Action
+
+    await websocket.accept()
+    env = EmailTriageEnv()
+
+    try:
+        while True:
+            raw = await websocket.receive_text()
+            try:
+                msg = json.loads(raw)
+            except json.JSONDecodeError:
+                await websocket.send_text(json.dumps({
+                    "type": "error",
+                    "data": {"message": "Invalid JSON", "code": "INVALID_JSON"},
+                }))
+                continue
+
+            msg_type = msg.get("type", "")
+
+            if msg_type == "reset":
+                data = msg.get("data", {})
+                email_id = data.get("email_id") if isinstance(data, dict) else None
+                obs = env.reset(email_id=email_id)
+                await websocket.send_text(json.dumps({
+                    "type": "observation",
+                    "data": {
+                        "observation": obs.model_dump(),
+                        "reward": None,
+                        "done": False,
+                        "tasks": [],
+                    },
+                }))
+
+            elif msg_type == "step":
+                step_data = msg.get("data", {})
+                if isinstance(step_data, dict):
+                    action_data = {k: v for k, v in step_data.items()
+                                   if k in {"category", "priority", "reply"}}
+                else:
+                    action_data = {}
+                try:
+                    action = Action(**action_data)
+                    result = env.step(action)
+                    obs_dict = result.observation.model_dump() if result.observation else {}
+                    task_list = [
+                        {
+                            "id":     t.id,
+                            "name":   t.name,
+                            "grader": t.grader,
+                            "score":  round(t.score, 4),
+                            "weight": t.weight,
+                        }
+                        for t in result.tasks
+                    ]
+                    await websocket.send_text(json.dumps({
+                        "type": "observation",
+                        "data": {
+                            "observation": obs_dict,
+                            "reward":      result.reward,
+                            "done":        result.done,
+                            "tasks":       task_list,
+                        },
+                    }))
+                except Exception as exc:
+                    await websocket.send_text(json.dumps({
+                        "type": "error",
+                        "data": {"message": str(exc), "code": "EXECUTION_ERROR"},
+                    }))
+
+            elif msg_type == "state":
+                state = env.state()
+                await websocket.send_text(json.dumps({
+                    "type": "state",
+                    "data": state.model_dump(),
+                }))
+
+            elif msg_type == "close":
+                break
+
+            else:
+                await websocket.send_text(json.dumps({
+                    "type": "error",
+                    "data": {"message": f"Unknown type: {msg_type}", "code": "UNKNOWN_TYPE"},
+                }))
+
+    except WebSocketDisconnect:
+        pass
+    except Exception as exc:
+        try:
+            await websocket.send_text(json.dumps({
+                "type": "error",
+                "data": {"message": str(exc), "code": "SESSION_ERROR"},
+            }))
+        except Exception:
+            pass
+
 
 # Serve built React frontend in production
 FRONTEND_DIST = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")

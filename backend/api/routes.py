@@ -69,15 +69,18 @@ async def step(payload: Dict[str, Any] = Body(...)):
     except RuntimeError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    # Build openenv-core-compatible StepResponse (extra="forbid" — only observation, reward, done allowed).
-    # Task scores are embedded inside observation so the Scaler Phase 2 validator can read them.
+    # Build the step response.
+    # Scaler Phase 2 validator schema: { observation, reward, done, tasks }
+    # - `tasks` must be at the TOP LEVEL (not inside observation) for the validator to find them.
+    # - `info` and `reward_detail` must NOT be present (cause extra="forbid" ValidationError).
     obs_dict = result.observation.model_dump() if result.observation else {}
-    obs_dict["tasks"] = [
+
+    task_list = [
         {
             "id":     t.id,
             "name":   t.name,
             "grader": t.grader,
-            "score":  round(t.score, 4),
+            "score":  round(t.score, 4),   # strictly between 0 and 1
             "weight": t.weight,
         }
         for t in result.tasks
@@ -87,6 +90,7 @@ async def step(payload: Dict[str, Any] = Body(...)):
         "observation": obs_dict,
         "reward":      result.reward,
         "done":        result.done,
+        "tasks":       task_list,           # top-level tasks — required by Scaler Phase 2
     }
 
 
