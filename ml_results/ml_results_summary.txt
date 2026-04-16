@@ -1,0 +1,54 @@
+============================================================
+  Email Triage AI — ML Results Summary
+============================================================
+
+DATASET
+  Total emails    : 1000
+  Categories      : Account, Billing Refund, Feature Request, Technical Support
+  Priorities      : Low, Medium, High
+
+MODEL
+  Algorithm       : TF-IDF (ngrams 1-2) + Calibrated LinearSVC
+  Evaluation      : 5-Fold Stratified Cross-Validation
+
+CATEGORY CLASSIFICATION
+  CV Accuracy     : 100.0% ± 0.0%
+  Rule-Based Acc  : 80.0%
+  Improvement     : ++20.0%
+
+                   precision    recall  f1-score   support
+
+          Account       1.00      1.00      1.00       237
+   Billing Refund       1.00      1.00      1.00       230
+  Feature Request       1.00      1.00      1.00       239
+Technical Support       1.00      1.00      1.00       294
+
+         accuracy                           1.00      1000
+        macro avg       1.00      1.00      1.00      1000
+     weighted avg       1.00      1.00      1.00      1000
+
+
+PRIORITY DETECTION
+  CV Accuracy     : 100.0% ± 0.0%
+  Rule-Based Acc  : 60.0%
+  Improvement     : ++40.0%
+
+              precision    recall  f1-score   support
+
+        High       1.00      1.00      1.00       286
+         Low       1.00      1.00      1.00       349
+      Medium       1.00      1.00      1.00       365
+
+    accuracy                           1.00      1000
+   macro avg       1.00      1.00      1.00      1000
+weighted avg       1.00      1.00      1.00      1000
+
+
+TOP KEYWORDS PER CATEGORY (TF-IDF Feature Importance)
+
+OUTPUT FILES
+  confusion_matrix_category.png
+  confusion_matrix_priority.png
+  top_words_per_class.png
+  model_comparison.png
+  cv_scores.png
